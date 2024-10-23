@@ -122,8 +122,8 @@ class CustomCollector(Collector):
 
         # TODO: Implement metrics for the following keys in `data`:
         #   bodies_being_recycled
-        #   cash_value
-        #   odor_density
+        #   cash_value_usd
+        #   odor_density_ppm
 
 
 # The main function to run

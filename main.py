@@ -5,6 +5,17 @@ from prometheus_client import start_http_server
 from prometheus_client.core import REGISTRY, GaugeMetricFamily
 from prometheus_client.registry import Collector
 
+#
+# Dependencies
+#
+# You'll need to install the following packages using `pip`:
+#   requests
+#   types-requests
+#   prometheus-client
+#
+# Like so: `pip install requests types-requests prometheus-client`
+#
+
 
 # This is just an example of querying a REST endpoint and returning the JSON response
 # converted to a Python dictionary

@@ -1,3 +1,8 @@
+# docker
+prometheus_server/prometheus_data/data
+grafana/data
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

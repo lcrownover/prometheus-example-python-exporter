@@ -1,0 +1,21 @@
+---
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+
+rule_files:
+
+scrape_configs:
+  - job_name: "flesh grinder metrics"
+    static_configs:
+      - targets:
+          - "prometheus_exporter:8000"
+        labels:
+          service: "flesh_grinder"
+          group: "myteam"
+          environment: "production"

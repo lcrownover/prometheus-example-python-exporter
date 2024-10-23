@@ -5,8 +5,6 @@ from prometheus_client import start_http_server
 from prometheus_client.core import REGISTRY, GaugeMetricFamily
 from prometheus_client.registry import Collector
 
-INTERVAL_SECONDS = 5
-
 
 # This is just an example of querying a REST endpoint and returning the JSON response
 # converted to a Python dictionary
@@ -21,16 +19,30 @@ def get_the_data() -> dict[str, int | float]:
     return resp.json()
 
 
+#
+# Background information on why we need a CustomCollector
+#
+# This CustomCollector isn't strictly necessary, but is good practice.
+# The default python prometheus docs collect on an interval and returns the newest
+# data whenever the /metrics endpoint is queried. This is inefficient, and we'd
+# rather wait to collect the metrics until the /metrics endpoint is queried.
+# To accomplish this, we need a little more boilerplate, seen below.
 class CustomCollector(Collector):
+    # This method is called whenever /metrics is queried.
     def collect(self):
-        # Go get data from the API
+        # Go get data from the API and store it in the `data` dict.
         data = get_the_data()
+
+        #
+        # Creating metrics
+        # I like to use long metric names to help me categorize metrics
+        # For the documentation field, think of this like what you'd use
+        # as the title of the graph in Grafana.
+        #
 
         #######################################################################
         # METRIC: Electrical Wattage Used for Recycling Flesh
         #######################################################################
-        # Create metrics
-        # I like to use long metric names to help me categorize metrics
         gauge_watts = GaugeMetricFamily(
             name="myproject_mycategory_myservice_watts",
             documentation="Electrical Wattage Used for Recycling Flesh",
@@ -48,7 +60,8 @@ class CustomCollector(Collector):
         # long as the labels are different, then I can have multiple lines on my
         # graph for the same metric name. Using the labels, I can filter by, for
         # example, where the metric is queried from (say I have to different APIs)
-        # I'm hitting.
+        # that I'm hitting.
+        #
         # gauge_watts.add_metric(
         #     value=data["watts"],    # same value
         #     labels=[                # different labels
@@ -56,6 +69,7 @@ class CustomCollector(Collector):
         #         "aws",
         #     ],
         # )
+        #
 
         # Yield that metric, which lets the function keep executing
         yield gauge_watts
@@ -98,14 +112,14 @@ class CustomCollector(Collector):
 
 # The main function to run
 if __name__ == "__main__":
-    # Register the collector
+    # Register our CustomCollector
     REGISTRY.register(CustomCollector())
 
-    # Show a server startup message
+    # Show a server startup message so you have some logging
     LISTEN_PORT = 8000
     print(f"Starting Prometheus Example Python Collector on 0.0.0.0{LISTEN_PORT}")
 
-    # Start up the server to expose the metrics.
+    # Start up the server which exposes the metrics at 0.0.0.0:LISTEN_PORT/metrics
     start_http_server(LISTEN_PORT)
 
     # Keep the exporter running

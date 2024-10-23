@@ -87,20 +87,20 @@ class CustomCollector(Collector):
         #######################################################################
 
         #######################################################################
-        # METRIC: Number of Active Flesh Recycling Nodes
+        # METRIC: Number of Active Flesh Recycling Motors
         #######################################################################
-        gauge_active_nodes = GaugeMetricFamily(
-            name="myproject_mycategory_myservice_active_nodes",
-            documentation="Number of Active Flesh Recycling Nodes",
+        gauge_active_motors = GaugeMetricFamily(
+            name="myproject_mycategory_myservice_active_motors",
+            documentation="Number of Active Flesh Recycling Motors",
         )
-        gauge_active_nodes.add_metric(
-            value=data["active_nodes"],
+        gauge_active_motors.add_metric(
+            value=data["active_motors"],
             labels=[
                 "https://oveeblebtyqqgalxzbhwhp4z4i0yhjek.lambda-url.us-west-2.on.aws/",
                 "aws",
             ],
         )
-        yield gauge_active_nodes
+        yield gauge_active_motors
         #######################################################################
 
         #######################################################################
@@ -119,6 +119,11 @@ class CustomCollector(Collector):
         )
         yield gauge_fr_od_state
         #######################################################################
+
+        # TODO: Implement metrics for the following keys in `data`:
+        #   bodies_being_recycled
+        #   cash_value
+        #   odor_density
 
 
 # The main function to run

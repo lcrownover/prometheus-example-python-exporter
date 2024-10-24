@@ -133,7 +133,7 @@ if __name__ == "__main__":
 
     # Show a server startup message so you have some logging
     LISTEN_PORT = 8000
-    print(f"Starting Prometheus Example Python Collector on 0.0.0.0{LISTEN_PORT}")
+    print(f"Starting Prometheus Example Python Collector on 0.0.0.0:{LISTEN_PORT}")
 
     # Start up the server which exposes the metrics at 0.0.0.0:LISTEN_PORT/metrics
     start_http_server(LISTEN_PORT)
